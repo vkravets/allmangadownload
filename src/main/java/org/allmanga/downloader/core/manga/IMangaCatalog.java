@@ -13,7 +13,7 @@ import java.util.Collection;
  */
 public interface IMangaCatalog {
 
-    public Collection<IManga> getMangaList();
+    public Collection<MangaInfo> getMangaList();
     public Collection<String> getTranslatesCatalog();
     public Collection<String> getGenreCatalog();
 

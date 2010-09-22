@@ -13,9 +13,7 @@ import java.util.Collection;
  */
 public interface IManga {
 
-    public void setName(String name);
-
-    public String getName();
+    public void parsePage(String url);
     public String getAuthor();
     public int getYear();
     public Collection<String> getMangaGenre();
@@ -23,7 +21,6 @@ public interface IManga {
     public String getCover();
     public Collection<String> getTranslates();
 
-    public String getURL();
     public Collection<String> getChapters();
     public Collection<String> getChapter(String name);
 

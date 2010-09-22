@@ -12,7 +12,8 @@ import java.util.HashMap;
  */
 public class Manga implements IManga{
 
-    private IManga manga;
+    private MangaCatalog mangaCatalog;
+    private MangaInfo mangaInfo;
 
     private String name;
     private String author;
@@ -27,92 +28,82 @@ public class Manga implements IManga{
     private Collection<String> chapters;
 
     // return collection of images url in the chapter
-    private HashMap<String, Collection<String>> chaptersCache;
+    private HashMap<String, Collection<String>> chapter;
 
-    public Manga(IManga manga) {
-        this.manga = manga;
-    }
-
-    public String getName() {
-        if (name == null) {
-            name = manga.getName();
-        }
-        return name;
+    public Manga(MangaCatalog mangaCatalog) {
+        this.mangaCatalog = mangaCatalog;
     }
 
     public String getAuthor() {
         if (author == null) {
-            author = manga.getAuthor();
+            author = mangaCatalog.getAuthor();
         }
         return author;
     }
 
     public int getYear() {
         if (year == -1) {
-            year = manga.getYear();
+            year = mangaCatalog.getYear();
         }
         return year;
     }
 
     public Collection<String> getMangaGenre() {
         if (mangaGenre == null) {
-            mangaGenre = manga.getMangaGenre();
+            mangaGenre = mangaCatalog.getMangaGenre();
         }
         return mangaGenre;
     }
 
     public String getDescription() {
         if (description == null) {
-            description = manga.getDescription();
+            description = mangaCatalog.getDescription();
         }
         return description;
     }
 
     public String getCover() {
         if (cover == null) {
-            cover = manga.getCover();
+            cover = mangaCatalog.getCover();
         }
         return cover;
     }
 
     public Collection<String> getTranslates() {
         if (translates == null) {
-            translates = manga.getTranslates();
+            translates = mangaCatalog.getTranslates();
         }
         return translates;
     }
 
-    public String getURL() {
-        if (url == null) {
-            url = manga.getURL();
-        }
-        return url;
-    }
-
     public Collection<String> getChapters() {
         if (chapters == null) {
-            chapters = manga.getChapters();
+            chapters = mangaCatalog.getChapters();
         }
         return chapters;
     }
 
     public Collection<String> getChapter(String name) {
-        if (chaptersCache == null) {
-            chaptersCache = new HashMap<String, Collection<String>>();
+        if (chapter == null) {
+            chapter = new HashMap<String, Collection<String>>();
         }
-        Collection<String> chapterCache = chaptersCache.get(name);
+        Collection<String> chapterCache = chapter.get(name);
         if (chapterCache == null) {
-            chapterCache = manga.getChapter(name);
-            chaptersCache.put(name, chapterCache);
+            chapterCache = mangaCatalog.getChapter(name);
+            chapter.put(name, chapterCache);
         }
         return chapterCache;
     }
 
-    public void setName(String name) {
-        manga.setName(name);
+    public MangaCatalog getMangaCatalog() {
+        return mangaCatalog;
     }
 
-    public IManga getManga() {
-        return manga;
+    public void parsePage(String url) {
+        mangaCatalog.parsePage(url);
+    }
+
+    public MangaInfo getMangaInfo() {
+        return mangaInfo;
     }
 }

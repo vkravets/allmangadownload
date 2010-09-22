@@ -3,11 +3,11 @@ class Manga24:
     def __init__(self):
         pass
 
-    ### MangaCatalog methods ###
+    ### Manga methods ###
 
-    # Return type: String
-    def getName(self):
-        """ Get Name of manga from URL """
+    # Parse the manga page and save needed info
+    def parsePage(self, url):
+        """ Perform parsing of mange page and save all needed information """
         return
 
     # Return type: String
@@ -40,11 +40,6 @@ class Manga24:
         """ Get list of translates of manga from URL """
         return
 
-    # Return type: String
-    def getURL(self):
-        """ Get Name of manga from URL """
-        return
-
     # Return type: Collection<String>
     def getChapters(self):
         return
@@ -55,7 +50,7 @@ class Manga24:
 
     ### MangaCatalog Catalog methods ###
 
-    # Return type: Collection<IManga>
+    # Return type: Collection<MangaInfo>
     def getMangaList(self):
         return
 

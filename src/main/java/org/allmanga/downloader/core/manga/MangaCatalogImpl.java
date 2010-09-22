@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 public class MangaCatalogImpl extends Manga implements IMangaCatalog{
 
-    private Collection<IManga> mangaList;
+    private Collection<MangaInfo> mangaList;
     private Collection<String> genreCatalog;
     private Collection<String> translatesCatalog;
 
@@ -20,18 +20,24 @@ public class MangaCatalogImpl extends Manga implements IMangaCatalog{
         super(mangaCatalog);
     }
 
-    public Collection<IManga> getMangaList() {
+    public Collection<MangaInfo> getMangaList() {
         if (mangaList == null) {
-            mangaList = getManga().getMangaList();
+            mangaList = getMangaCatalog().getMangaList();
         }
         return mangaList;
     }
 
     public Collection<String> getGenreCatalog() {
-        return null;
+        if (genreCatalog == null) {
+            genreCatalog = getMangaCatalog().getGenreCatalog();
+        }
+        return genreCatalog;
     }
 
     public Collection<String> getTranslatesCatalog() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        if (translatesCatalog == null) {
+            translatesCatalog = getMangaCatalog().getTranslatesCatalog();
+        }
+        return translatesCatalog;
     }
 }
