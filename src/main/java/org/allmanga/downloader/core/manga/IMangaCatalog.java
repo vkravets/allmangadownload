@@ -12,9 +12,11 @@ import java.util.Collection;
  * @author Sly
  */
 public interface IMangaCatalog {
+    public Collection<InfoItem> getMangaList();
+    public Collection<InfoItem> getTranslatesCatalog();
+    public Collection<InfoItem> getGenreCatalog();
 
-    public Collection<MangaInfo> getMangaList();
-    public Collection<String> getTranslatesCatalog();
-    public Collection<String> getGenreCatalog();
-
+    public String getMangaCatalogURL();
+    public String getTranslatesCatalogURL();
+    public String getGenreCatalogURL();
 }

@@ -13,15 +13,15 @@ import java.util.HashMap;
 public class Manga implements IManga{
 
     private MangaCatalog mangaCatalog;
-    private MangaInfo mangaInfo;
+    private InfoItem mangaInfo;
 
     private String name;
     private String author;
     private int year = -1;
-    private Collection<String> mangaGenre;
+    private Collection<InfoItem> mangaGenre;
     private String description;
     private String cover;
-    private Collection<String> translates;
+    private Collection<InfoItem> translates;
     private String url;
 
     // return collection of chapters name
@@ -48,7 +48,7 @@ public class Manga implements IManga{
         return year;
     }
 
-    public Collection<String> getMangaGenre() {
+    public Collection<InfoItem> getMangaGenre() {
         if (mangaGenre == null) {
             mangaGenre = mangaCatalog.getMangaGenre();
         }
@@ -69,7 +69,7 @@ public class Manga implements IManga{
         return cover;
     }
 
-    public Collection<String> getTranslates() {
+    public Collection<InfoItem> getTranslates() {
         if (translates == null) {
             translates = mangaCatalog.getTranslates();
         }
@@ -103,7 +103,7 @@ public class Manga implements IManga{
         mangaCatalog.parsePage(url);
     }
 
-    public MangaInfo getMangaInfo() {
+    public InfoItem getMangaInfo() {
         return mangaInfo;
     }
 }

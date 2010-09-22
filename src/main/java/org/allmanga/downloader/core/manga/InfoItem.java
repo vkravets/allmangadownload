@@ -7,12 +7,12 @@ package org.allmanga.downloader.core.manga;
  * Time: 9:12:19 PM
  * Mail to vladimir.kravets-ukr@hp.com
  */
-public class MangaInfo {
+public class InfoItem {
 
     private String name;
     private String url;
 
-    public MangaInfo(String name, String url) {
+    public InfoItem(String name, String url) {
         this.name = name;
         this.url = url;
     }

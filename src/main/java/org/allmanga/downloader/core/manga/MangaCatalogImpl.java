@@ -11,33 +11,57 @@ import java.util.Collection;
  */
 public class MangaCatalogImpl extends Manga implements IMangaCatalog{
 
-    private Collection<MangaInfo> mangaList;
-    private Collection<String> genreCatalog;
-    private Collection<String> translatesCatalog;
+    private Collection<InfoItem> mangaList;
+    private Collection<InfoItem> genreCatalog;
+    private Collection<InfoItem> translatesCatalog;
 
+    private String mangaCatalogURL;
+    private String genreCatalogURL;
+    private String translateCatalogURL;
 
     public MangaCatalogImpl(MangaCatalog mangaCatalog) {
         super(mangaCatalog);
     }
 
-    public Collection<MangaInfo> getMangaList() {
+    public Collection<InfoItem> getMangaList() {
         if (mangaList == null) {
             mangaList = getMangaCatalog().getMangaList();
         }
         return mangaList;
     }
 
-    public Collection<String> getGenreCatalog() {
+    public Collection<InfoItem> getGenreCatalog() {
         if (genreCatalog == null) {
             genreCatalog = getMangaCatalog().getGenreCatalog();
         }
         return genreCatalog;
     }
 
-    public Collection<String> getTranslatesCatalog() {
+    public Collection<InfoItem> getTranslatesCatalog() {
         if (translatesCatalog == null) {
             translatesCatalog = getMangaCatalog().getTranslatesCatalog();
         }
         return translatesCatalog;
+    }
+
+    public String getMangaCatalogURL() {
+        if (mangaCatalogURL == null) {
+            mangaCatalogURL = getMangaCatalog().getMangaCatalogURL();
+        }
+        return mangaCatalogURL;
+    }
+
+    public String getTranslatesCatalogURL() {
+        if (translateCatalogURL == null) {
+            translateCatalogURL = getMangaCatalog().getTranslatesCatalogURL();
+        }
+        return translateCatalogURL;
+    }
+
+    public String getGenreCatalogURL() {
+        if (genreCatalogURL == null) {
+            genreCatalogURL = getMangaCatalog().getGenreCatalogURL();
+        }
+        return genreCatalogURL;
     }
 }

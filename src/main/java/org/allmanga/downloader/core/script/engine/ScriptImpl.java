@@ -5,11 +5,14 @@
 
 package org.allmanga.downloader.core.script.engine;
 
+import org.allmanga.downloader.core.manga.InfoItem;
 import org.allmanga.downloader.core.manga.MangaCatalog;
+import org.allmanga.downloader.core.manga.MangaCatalogImpl;
 import org.apache.log4j.Logger;
 
 import javax.script.ScriptException;
 import java.io.FileNotFoundException;
+import java.util.Collection;
 
 /**
  *
@@ -64,8 +67,30 @@ public class ScriptImpl implements IScript {
 
     public static void main(String[] argv) {
         IScript script = new ScriptImpl("Manga24", "scripts\\manga24.py", "jython");
-        MangaCatalog mangaCatalog = script.getManga();
-        System.out.println(mangaCatalog.getAuthor());
+        MangaCatalogImpl mangaCatalog = new MangaCatalogImpl(script.getManga());
+
+        mangaCatalog.parsePage(mangaCatalog.getGenreCatalogURL());
+        for (InfoItem info : mangaCatalog.getGenreCatalog()) {
+            System.out.println(info.getName() + " -> " + info.getUrl());
+        }
+
+        mangaCatalog.parsePage(mangaCatalog.getTranslatesCatalogURL());
+        for (InfoItem info : mangaCatalog.getTranslatesCatalog()) {
+            System.out.println(info.getName() + " -> " + info.getUrl());
+        }
+
+        mangaCatalog.parsePage(mangaCatalog.getMangaCatalogURL());
+        Collection<InfoItem> mangaList = mangaCatalog.getMangaList();
+        for (InfoItem info : mangaList) {
+            mangaCatalog.parsePage(info.getUrl());
+            System.out.println(mangaCatalog.getAuthor());
+            System.out.println(mangaCatalog.getCover());
+            for (InfoItem genre : mangaCatalog.getMangaGenre()) {
+                System.out.println(genre.getName());
+            }
+            break;
+        }
+        
     }
 
 }

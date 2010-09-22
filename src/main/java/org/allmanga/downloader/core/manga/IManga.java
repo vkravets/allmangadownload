@@ -16,13 +16,12 @@ public interface IManga {
     public void parsePage(String url);
     public String getAuthor();
     public int getYear();
-    public Collection<String> getMangaGenre();
+    public Collection<InfoItem> getMangaGenre();
     public String getDescription();
     public String getCover();
-    public Collection<String> getTranslates();
+    public Collection<InfoItem> getTranslates();
 
     public Collection<String> getChapters();
     public Collection<String> getChapter(String name);
-
 
 }
