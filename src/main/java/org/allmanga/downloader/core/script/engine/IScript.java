@@ -1,0 +1,20 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package org.allmanga.downloader.core.script.engine;
+
+import org.allmanga.downloader.core.manga.Manga;
+
+/**
+ *
+ * @author Sly
+ */
+public interface IScript {
+
+    public String getName();
+    public String getPath();
+    public Manga getManga();
+
+}

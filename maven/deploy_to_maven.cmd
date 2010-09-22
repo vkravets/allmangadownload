@@ -1,0 +1,1 @@
+mvn install:install-file -DgroupId=org.python -DartifactId=jython -Dversion=2.5.2 -Dpackaging=jar -Dfile=jython_2.5.2b2.jar
