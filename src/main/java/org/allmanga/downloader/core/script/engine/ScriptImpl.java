@@ -5,7 +5,7 @@
 
 package org.allmanga.downloader.core.script.engine;
 
-import org.allmanga.downloader.core.manga.Manga;
+import org.allmanga.downloader.core.manga.MangaCatalog;
 import org.apache.log4j.Logger;
 
 import javax.script.ScriptException;
@@ -41,13 +41,13 @@ public class ScriptImpl implements IScript {
         return engineName;
     }
 
-    public Manga getManga() {
-        Manga result = null;
+    public MangaCatalog getManga() {
+        MangaCatalog result = null;
 
         ScriptEngineInfo engineInfo =  ScriptEngineManager.getEngineByName(engineName);
         if (engineInfo != null) {
             try {
-                result = (Manga) ScriptEngineManager.runScript(scriptPath, engineInfo);
+                result = (MangaCatalog) ScriptEngineManager.runScript(scriptPath, engineInfo);
             } catch (FileNotFoundException ex) {
                 // TODO: Message Box, readable message
                 LOG.error(ex.getMessage());
@@ -64,8 +64,8 @@ public class ScriptImpl implements IScript {
 
     public static void main(String[] argv) {
         IScript script = new ScriptImpl("Manga24", "scripts\\manga24.py", "jython");
-        Manga manga = script.getManga();
-        System.out.println(manga.getAuthor());
+        MangaCatalog mangaCatalog = script.getManga();
+        System.out.println(mangaCatalog.getAuthor());
     }
 
 }

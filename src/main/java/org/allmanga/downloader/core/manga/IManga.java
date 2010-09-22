@@ -13,10 +13,12 @@ import java.util.Collection;
  */
 public interface IManga {
 
+    public void setName(String name);
+
     public String getName();
     public String getAuthor();
     public int getYear();
-    public Collection<String> getGenre();
+    public Collection<String> getMangaGenre();
     public String getDescription();
     public String getCover();
     public Collection<String> getTranslates();

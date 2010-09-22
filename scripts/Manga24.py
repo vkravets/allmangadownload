@@ -3,7 +3,7 @@ class Manga24:
     def __init__(self):
         pass
 
-    ### Manga methods ###
+    ### MangaCatalog methods ###
 
     # Return type: String
     def getName(self):
@@ -53,9 +53,9 @@ class Manga24:
     def getChapter(self, name):
         return
 
-    ### Manga Catalog methods ###
+    ### MangaCatalog Catalog methods ###
 
-    # Return type: Collection<String>
+    # Return type: Collection<IManga>
     def getMangaList(self):
         return
 

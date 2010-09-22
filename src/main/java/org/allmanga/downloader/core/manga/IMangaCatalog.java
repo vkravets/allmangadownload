@@ -14,7 +14,7 @@ import java.util.Collection;
 public interface IMangaCatalog {
 
     public Collection<IManga> getMangaList();
-    public Collection<String> getTranslates();
-    public Collection<String> getGenres();
+    public Collection<String> getTranslatesCatalog();
+    public Collection<String> getGenreCatalog();
 
 }

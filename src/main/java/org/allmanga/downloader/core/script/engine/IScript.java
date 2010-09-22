@@ -5,7 +5,7 @@
 
 package org.allmanga.downloader.core.script.engine;
 
-import org.allmanga.downloader.core.manga.Manga;
+import org.allmanga.downloader.core.manga.MangaCatalog;
 
 /**
  *
@@ -15,6 +15,6 @@ public interface IScript {
 
     public String getName();
     public String getPath();
-    public Manga getManga();
+    public MangaCatalog getManga();
 
 }

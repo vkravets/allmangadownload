@@ -5,7 +5,7 @@
 
 package org.allmanga.downloader.core.script.engine;
 
-import org.allmanga.downloader.core.manga.Manga;
+import org.allmanga.downloader.core.manga.MangaCatalog;
 import org.apache.log4j.Logger;
 
 import javax.script.Invocable;
@@ -73,13 +73,6 @@ public class ScriptEngineManager {
         return engine;
     }
 
-    private static String readFileAsString(File filePath) throws java.io.IOException {
-        byte[] buffer = new byte[(int) filePath.length()];
-        BufferedInputStream f = new BufferedInputStream(new FileInputStream(filePath));
-        f.read(buffer);
-        return new String(buffer);
-    }
-
     public static Object runScript(String fullPathName, ScriptEngineInfo engineInfo) throws FileNotFoundException, ScriptException {
         Object data = null;
         ScriptEngine scriptEngine = engineInfo.getScriptEngine();
@@ -89,7 +82,7 @@ public class ScriptEngineManager {
         try {
 		    scriptEngine.eval(reader);
 		    Object manga = ((Invocable)scriptEngine).invokeFunction("getManga");
-            data = ((Invocable)scriptEngine).getInterface(manga, Manga.class);
+            data = ((Invocable)scriptEngine).getInterface(manga, MangaCatalog.class);
         } catch (NoSuchMethodException e) {
             LOG.warn("Main function getManga() was not found in the " + scriptFile.getName() + "Please check that needed function exists and return correct data");
         }
