@@ -5,6 +5,8 @@
 
 package org.allmanga.downloader.core.manga;
 
+import org.allmanga.downloader.core.manga.share.InfoItem;
+
 import java.util.Collection;
 
 /**

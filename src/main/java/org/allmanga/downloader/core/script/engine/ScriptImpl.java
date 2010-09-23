@@ -5,7 +5,7 @@
 
 package org.allmanga.downloader.core.script.engine;
 
-import org.allmanga.downloader.core.manga.InfoItem;
+import org.allmanga.downloader.core.manga.share.InfoItem;
 import org.allmanga.downloader.core.manga.MangaCatalog;
 import org.allmanga.downloader.core.manga.MangaCatalogImpl;
 import org.apache.log4j.Logger;
@@ -88,6 +88,7 @@ public class ScriptImpl implements IScript {
             for (InfoItem genre : mangaCatalog.getMangaGenre()) {
                 System.out.println(genre.getName());
             }
+            System.out.println(mangaCatalog.getDescription());
             break;
         }
         

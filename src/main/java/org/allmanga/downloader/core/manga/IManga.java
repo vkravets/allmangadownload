@@ -5,6 +5,9 @@
 
 package org.allmanga.downloader.core.manga;
 
+import org.allmanga.downloader.core.manga.share.ChapterInfo;
+import org.allmanga.downloader.core.manga.share.InfoItem;
+
 import java.util.Collection;
 
 /**
@@ -21,7 +24,7 @@ public interface IManga {
     public String getCover();
     public Collection<InfoItem> getTranslates();
 
-    public Collection<String> getChapters();
+    public Collection<ChapterInfo> getChapters();
     public Collection<String> getChapter(String name);
 
 }

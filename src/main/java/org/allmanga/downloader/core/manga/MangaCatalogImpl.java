@@ -1,5 +1,7 @@
 package org.allmanga.downloader.core.manga;
 
+import org.allmanga.downloader.core.manga.share.InfoItem;
+
 import java.util.Collection;
 
 /**
@@ -9,7 +11,7 @@ import java.util.Collection;
  * Time: 7:49:06 PM
  * Mail to vladimir.kravets-ukr@hp.com
  */
-public class MangaCatalogImpl extends Manga implements IMangaCatalog{
+public class MangaCatalogImpl extends MangaImpl implements IMangaCatalog{
 
     private Collection<InfoItem> mangaList;
     private Collection<InfoItem> genreCatalog;
