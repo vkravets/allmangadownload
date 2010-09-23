@@ -1,4 +1,4 @@
-from org.allmanga.downloader.core.manga import InfoItem
+from org.allmanga.downloader.core.manga.share import InfoItem
 import org
 import java
 
@@ -30,8 +30,8 @@ class Manga24:
     def getAuthor(self):
         """ Get Author of manga from URL """
         name = self.doc.selectSingleNode("//DIV[@id='content']/P[1]")
-        string = name.getText().split(u"–ñ–∞–Ω—Ä:")
-        string = string[0].split(u"–ê–≤—Ç–æ—Ä:")
+        string = name.getText().split(u"∆‡Ì:")
+        string = string[0].split(u"¿‚ÚÓ:")
         return string[1].strip()
 
     # Return type: int
