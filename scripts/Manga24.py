@@ -30,8 +30,8 @@ class Manga24:
     def getAuthor(self):
         """ Get Author of manga from URL """
         name = self.doc.selectSingleNode("//DIV[@id='content']/P[1]")
-        string = name.getText().split(u"Æàíğ:")
-        string = string[0].split(u"Àâòîğ:")
+        string = name.getText().split(u"Ğ–Ğ°Ğ½Ñ€:")
+        string = string[0].split(u"ĞĞ²Ñ‚Ğ¾Ñ€:")
         return string[1].strip()
 
     # Return type: int
