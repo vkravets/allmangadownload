@@ -30,7 +30,9 @@ class Manga24:
     def getAuthor(self):
         """ Get Author of manga from URL """
         name = self.doc.selectSingleNode("//DIV[@id='content']/P[1]")
-        return name.getText()
+        string = name.getText().split(u"Жанр:")
+        string = string[0].split(u"Автор:")
+        return string[1].strip()
 
     # Return type: int
     def getYear(self):
@@ -50,7 +52,8 @@ class Manga24:
     # Return type: String
     def getDescription(self):
         """ Get Description of manga from URL """
-        return
+        name = self.doc.selectSingleNode("//DIV[@id='content']/P[2]")
+        return name.getText()
 
     # Return type: String
     def getCover(self):
@@ -87,8 +90,10 @@ class Manga24:
         name = self.doc.selectNodes("//DIV[@id='content']/UL/DL/DT/STRONG/A")
         collection = java.util.ArrayList()
         for item in name:
-            info = InfoItem(item.getText(), self.baseUrl+item.attribute("href").getText())
-            collection.add(info)
+            text = item.getText().strip()
+            if (len(text) > 0):
+                info = InfoItem(text, self.baseUrl+item.attribute("href").getText())
+                collection.add(info)
         return collection
 
     # Return type: Collection<InfoItem>
