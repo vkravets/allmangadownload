@@ -1,6 +1,7 @@
 package org.allmanga.downloader.core.manga;
 
 import org.allmanga.downloader.core.manga.share.InfoItem;
+import org.allmanga.downloader.core.manga.share.PageType;
 
 import java.util.Collection;
 
@@ -11,7 +12,7 @@ import java.util.Collection;
  * Time: 7:49:06 PM
  * Mail to vladimir.kravets-ukr@hp.com
  */
-public class MangaCatalogImpl extends MangaImpl implements IMangaCatalog{
+public class MangaCatalogImpl extends AbstractManga implements IMangaCatalog{
 
     private Collection<InfoItem> mangaList;
     private Collection<InfoItem> genreCatalog;
@@ -27,6 +28,7 @@ public class MangaCatalogImpl extends MangaImpl implements IMangaCatalog{
 
     public Collection<InfoItem> getMangaList() {
         if (mangaList == null) {
+            parseMangaCatalogPage();
             mangaList = getMangaCatalog().getMangaList();
         }
         return mangaList;
@@ -34,6 +36,7 @@ public class MangaCatalogImpl extends MangaImpl implements IMangaCatalog{
 
     public Collection<InfoItem> getGenreCatalog() {
         if (genreCatalog == null) {
+            parseGenreCatalogPage();
             genreCatalog = getMangaCatalog().getGenreCatalog();
         }
         return genreCatalog;
@@ -41,6 +44,7 @@ public class MangaCatalogImpl extends MangaImpl implements IMangaCatalog{
 
     public Collection<InfoItem> getTranslatesCatalog() {
         if (translatesCatalog == null) {
+            parseTranslatesCatalogPage();
             translatesCatalog = getMangaCatalog().getTranslatesCatalog();
         }
         return translatesCatalog;
@@ -65,5 +69,17 @@ public class MangaCatalogImpl extends MangaImpl implements IMangaCatalog{
             genreCatalogURL = getMangaCatalog().getGenreCatalogURL();
         }
         return genreCatalogURL;
+    }
+
+    public void parseMangaCatalogPage() {
+        getMangaCatalog().parsePage(getMangaCatalogURL(), PageType.MANGA_LIST);
+    }
+
+    public void parseGenreCatalogPage() {
+        getMangaCatalog().parsePage(getGenreCatalogURL(), PageType.GENRES);        
+    }
+
+    public void parseTranslatesCatalogPage() {
+        getMangaCatalog().parsePage(getTranslatesCatalogURL(), PageType.TRANSLATORS);        
     }
 }

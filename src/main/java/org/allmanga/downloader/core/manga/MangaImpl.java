@@ -14,9 +14,9 @@ import java.util.HashMap;
  * Time: 6:58:59 PM
  * Mail to vladimir.kravets-ukr@hp.com
  */
-public class MangaImpl implements IManga{
+public class MangaImpl extends AbstractManga implements IManga{
 
-    private MangaCatalog mangaCatalog;
+    private InfoItem mangaInfo;
 
     private String author;
     private int year = -1;
@@ -31,55 +31,73 @@ public class MangaImpl implements IManga{
     // return collection of images url in the chapter
     private HashMap<String, Collection<String>> chapter;
 
+    private boolean isAlreadyParsed = false;
+
     public MangaImpl(MangaCatalog mangaCatalog) {
-        this.mangaCatalog = mangaCatalog;
+        super(mangaCatalog);
+    }
+
+    public MangaImpl(MangaCatalog mangaCatalog, InfoItem info) {
+        super(mangaCatalog);
+        this.mangaInfo = info;
+    }
+
+    public MangaImpl(MangaCatalog mangaCatalog, String name, String url) {
+        this(mangaCatalog, new InfoItem(name, url));
     }
 
     public String getAuthor() {
         if (author == null) {
-            author = mangaCatalog.getAuthor();
+            parseMangaInfo();
+            author = getMangaCatalog().getAuthor();
         }
         return author;
     }
 
     public int getYear() {
         if (year == -1) {
-            year = mangaCatalog.getYear();
+            parseMangaInfo();
+            year = getMangaCatalog().getYear();
         }
         return year;
     }
 
     public Collection<InfoItem> getMangaGenre() {
         if (mangaGenre == null) {
-            mangaGenre = mangaCatalog.getMangaGenre();
+            parseMangaInfo();
+            mangaGenre = getMangaCatalog().getMangaGenre();
         }
         return mangaGenre;
     }
 
     public String getDescription() {
         if (description == null) {
-            description = mangaCatalog.getDescription();
+            parseMangaInfo();
+            description = getMangaCatalog().getDescription();
         }
         return description;
     }
 
     public String getCover() {
         if (cover == null) {
-            cover = mangaCatalog.getCover();
+            parseMangaInfo();
+            cover = getMangaCatalog().getCover();
         }
         return cover;
     }
 
     public Collection<InfoItem> getMangaTranslates() {
         if (translates == null) {
-            translates = mangaCatalog.getMangaTranslates();
+            parseMangaInfo();
+            translates = getMangaCatalog().getMangaTranslates();
         }
         return translates;
     }
 
     public Collection<ChapterInfo> getChapters() {
         if (chapters == null) {
-            chapters = mangaCatalog.getChapters();
+            parseMangaInfo();
+            chapters = getMangaCatalog().getChapters();
         }
         return chapters;
     }
@@ -90,18 +108,27 @@ public class MangaImpl implements IManga{
         }
         Collection<String> chapterCache = chapter.get(name);
         if (chapterCache == null) {
-            chapterCache = mangaCatalog.getChapter(name);
+            chapterCache = getMangaCatalog().getChapter(name);
             chapter.put(name, chapterCache);
         }
         return chapterCache;
     }
 
-    public MangaCatalog getMangaCatalog() {
-        return mangaCatalog;
+    public void parsePage(String url, PageType type) {
+        getMangaCatalog().parsePage(url, type);
     }
 
-    public void parsePage(String url, PageType type) {
-        mangaCatalog.parsePage(url, type);
+
+    public void parseMangaInfo() {
+        this.parseMangaInfo(false);
+    }
+
+    public void parseMangaInfo(boolean forceRefresh) {
+        boolean needToParse = forceRefresh || !isAlreadyParsed;
+        if (needToParse) {
+            parsePage(mangaInfo.getUrl(), PageType.MANGA_INFO);
+            isAlreadyParsed = true;
+        }
     }
 
 }

@@ -28,6 +28,8 @@ class Manga24:
     # Parse the manga page and save needed info
     def parsePage(self, url, type):
         """ Perform parsing of mange page and save all needed information """
+        print "Parsing page %s [%s]" % (url, type)
+        
         if (self.url == url):
             return
         self.url = url
@@ -116,9 +118,9 @@ class Manga24:
 
         ## get author
         name = self.doc.selectSingleNode("//DIV[@id='content']/P[1]")
-        string = name.getText().split(u"Жанр:")
-        string = string[0].split(u"Автор:")
-        self.author = string[1].strip()
+        #string = name.getText().split(u"Жанр:")
+        #string = string[0].split(u"Автор:")
+        self.author = name.getText()
 
         ## get year
         self.year = 0
@@ -137,9 +139,12 @@ class Manga24:
 
         ## Get path to cover of manga
         name = self.doc.selectSingleNode("//DIV[@id='content']/IMG[@id='imgright']")
-        self.cover = self.baseUrl + name.attribute("src").getText()
-
-
+        if name is not None:
+            coverUrl = name.attribute("src").getText()
+            if  (coverUrl.find(self.baseUrl) != -1):
+                self.cover = coverUrl
+            else:
+                self.cover = self.baseUrl + coverUrl
         ### TODO: Other Info from manga page
 
         return

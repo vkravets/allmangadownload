@@ -5,10 +5,10 @@
 
 package org.allmanga.downloader.core.script.engine;
 
-import org.allmanga.downloader.core.manga.share.InfoItem;
 import org.allmanga.downloader.core.manga.MangaCatalog;
 import org.allmanga.downloader.core.manga.MangaCatalogImpl;
-import org.allmanga.downloader.core.manga.share.PageType;
+import org.allmanga.downloader.core.manga.MangaImpl;
+import org.allmanga.downloader.core.manga.share.InfoItem;
 import org.apache.log4j.Logger;
 
 import javax.script.ScriptException;
@@ -68,30 +68,30 @@ public class ScriptImpl implements IScript {
 
     public static void main(String[] argv) {
         IScript script = new ScriptImpl("Manga24", "scripts\\manga24.py", "jython");
-        MangaCatalogImpl mangaCatalog = new MangaCatalogImpl(script.getManga());
+        MangaCatalog catalog = script.getManga();
+        MangaCatalogImpl mangaCatalog = new MangaCatalogImpl(catalog);
 
-        mangaCatalog.parsePage(mangaCatalog.getGenreCatalogURL(), PageType.GENRES);
         for (InfoItem info : mangaCatalog.getGenreCatalog()) {
             System.out.println(info.getName() + " -> " + info.getUrl());
         }
 
-        mangaCatalog.parsePage(mangaCatalog.getTranslatesCatalogURL(), PageType.TRANSLATORS);
         for (InfoItem info : mangaCatalog.getTranslatesCatalog()) {
             System.out.println(info.getName() + " -> " + info.getUrl());
         }
 
-        mangaCatalog.parsePage(mangaCatalog.getMangaCatalogURL(), PageType.MANGA_LIST);
         Collection<InfoItem> mangaList = mangaCatalog.getMangaList();
+        int i = 0;
         for (InfoItem info : mangaList) {
             System.out.println(info.getUrl());
-            mangaCatalog.parsePage(info.getUrl(), PageType.MANGA_INFO);
-            System.out.println(mangaCatalog.getAuthor());
-            System.out.println(mangaCatalog.getCover());
-            for (InfoItem genre : mangaCatalog.getMangaGenre()) {
+            MangaImpl manga = new MangaImpl(catalog, info);
+            System.out.println(manga.getAuthor());
+            System.out.println(manga.getCover());
+            for (InfoItem genre : manga.getMangaGenre()) {
                 System.out.println(genre.getName());
             }
-            System.out.println(mangaCatalog.getDescription());
-            break;
+            System.out.println(manga.getDescription());
+            if (i > 3) break;
+            i++;
         }
         
     }
