@@ -2,6 +2,7 @@ package org.allmanga.downloader.core.manga;
 
 import org.allmanga.downloader.core.manga.share.ChapterInfo;
 import org.allmanga.downloader.core.manga.share.InfoItem;
+import org.allmanga.downloader.core.manga.share.PageType;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -69,9 +70,9 @@ public class MangaImpl implements IManga{
         return cover;
     }
 
-    public Collection<InfoItem> getTranslates() {
+    public Collection<InfoItem> getMangaTranslates() {
         if (translates == null) {
-            translates = mangaCatalog.getTranslates();
+            translates = mangaCatalog.getMangaTranslates();
         }
         return translates;
     }
@@ -99,8 +100,8 @@ public class MangaImpl implements IManga{
         return mangaCatalog;
     }
 
-    public void parsePage(String url) {
-        mangaCatalog.parsePage(url);
+    public void parsePage(String url, PageType type) {
+        mangaCatalog.parsePage(url, type);
     }
 
 }
