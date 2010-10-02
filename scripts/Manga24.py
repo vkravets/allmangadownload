@@ -1,4 +1,5 @@
 from org.allmanga.downloader.core.manga.share import InfoItem
+from org.allmanga.downloader.core.manga.share import ChapterInfo
 from org.allmanga.downloader.core.manga.share import PageType
 import org
 import java
@@ -29,7 +30,7 @@ class Manga24:
     def parsePage(self, url, type):
         """ Perform parsing of mange page and save all needed information """
         print "Parsing page %s [%s]" % (url, type)
-        
+
         if (self.url == url):
             return
         self.url = url
@@ -41,7 +42,6 @@ class Manga24:
         domReader = org.dom4j.io.DOMReader()
         self.doc = domReader.read(document)
 
-        print(type)
         if (type == PageType.MANGA_INFO):
             self.setMangaInfo()
 
@@ -83,11 +83,36 @@ class Manga24:
 
     # Return type: Collection<String>
     def getChapters(self):
-        return
+        name = self.doc.selectNodes("//DIV[@class='chapters']/UL/LI")
+        collection = java.util.ArrayList()
+        for item in name:
+            iterator = item.elementIterator("EM");
+            chapterName = ""
+            chapterURL = ""
+            chapterTranslate = ""
+            if iterator.hasNext():
+                chapterNameElement = iterator.next()
+                chapterName = chapterNameElement.getText()
+            iterator = item.elementIterator("SPAN")
+            if iterator.hasNext():
+                chapterURLElement = iterator.next()
+                chapterURLElement = chapterURLElement.elementIterator("A").next()
+                chapterURL = chapterURLElement.attribute("href").getText()
+                if (chapterURL.find(self.baseUrl) == -1):
+                    chapterURL = self.baseUrl + chapterURL
+            chapterInfo = ChapterInfo(chapterName.strip(), chapterTranslate.strip(), chapterURL.strip())
+            collection.add(chapterInfo)
+        self.chapters = collection
+        return self.chapters
 
     # Return type: Collection<String>
     def getChapter(self, name):
-        return
+        print "Getting chapter \"%s\" " % name
+        chapterList = self.chapters
+        for item in chapterList:
+            if (item.getName() == name):
+                return self.parseChapter(item.getUrl())
+        return None
 
     ### MangaCatalog Catalog methods ###
 
@@ -113,6 +138,9 @@ class Manga24:
         return self.baseUrl + "all/"
 
     ### Some parsing stuff
+
+    def parseChapter(self, url):
+        return
 
     def setMangaInfo(self):
 

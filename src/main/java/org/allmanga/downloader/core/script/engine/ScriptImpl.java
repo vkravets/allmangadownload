@@ -8,6 +8,7 @@ package org.allmanga.downloader.core.script.engine;
 import org.allmanga.downloader.core.manga.MangaCatalog;
 import org.allmanga.downloader.core.manga.MangaCatalogImpl;
 import org.allmanga.downloader.core.manga.MangaImpl;
+import org.allmanga.downloader.core.manga.share.ChapterInfo;
 import org.allmanga.downloader.core.manga.share.InfoItem;
 import org.apache.log4j.Logger;
 
@@ -71,13 +72,13 @@ public class ScriptImpl implements IScript {
         MangaCatalog catalog = script.getManga();
         MangaCatalogImpl mangaCatalog = new MangaCatalogImpl(catalog);
 
-        for (InfoItem info : mangaCatalog.getGenreCatalog()) {
-            System.out.println(info.getName() + " -> " + info.getUrl());
-        }
+//        for (InfoItem info : mangaCatalog.getGenreCatalog()) {
+//            System.out.println(info.getName() + " -> " + info.getUrl());
+//        }
 
-        for (InfoItem info : mangaCatalog.getTranslatesCatalog()) {
-            System.out.println(info.getName() + " -> " + info.getUrl());
-        }
+//        for (InfoItem info : mangaCatalog.getTranslatesCatalog()) {
+//            System.out.println(info.getName() + " -> " + info.getUrl());
+//        }
 
         Collection<InfoItem> mangaList = mangaCatalog.getMangaList();
         int i = 0;
@@ -89,9 +90,15 @@ public class ScriptImpl implements IScript {
             for (InfoItem genre : manga.getMangaGenre()) {
                 System.out.println(genre.getName());
             }
+//            manga.getChapters();
+            for (ChapterInfo chapterName : manga.getChapters()) {
+                System.out.println(chapterName.getName() + " [" + chapterName.getTranslator() + "] " + chapterName.getUrl());
+                manga.getChapter(chapterName.getName());
+                break;
+            }
             System.out.println(manga.getDescription());
-            if (i > 3) break;
             i++;
+            if (i >= 1) break;
         }
         
     }
