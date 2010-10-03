@@ -90,11 +90,9 @@ public class ScriptImpl implements IScript {
             for (InfoItem genre : manga.getMangaGenre()) {
                 System.out.println(genre.getName());
             }
-//            manga.getChapters();
             for (ChapterInfo chapterName : manga.getChapters()) {
                 System.out.println(chapterName.getName() + " [" + chapterName.getTranslator() + "] " + chapterName.getUrl());
-                manga.getChapter(chapterName.getName());
-                break;
+                System.out.println(manga.getChapter(chapterName.getName()));
             }
             System.out.println(manga.getDescription());
             i++;

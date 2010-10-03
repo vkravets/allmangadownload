@@ -1,6 +1,12 @@
 from org.allmanga.downloader.core.manga.share import InfoItem
 from org.allmanga.downloader.core.manga.share import ChapterInfo
 from org.allmanga.downloader.core.manga.share import PageType
+
+from net.sf.json import JSONSerializer
+
+from java.util.regex import *
+from java.lang import *
+
 import org
 import java
 
@@ -140,7 +146,24 @@ class Manga24:
     ### Some parsing stuff
 
     def parseChapter(self, url):
-        return
+        # Get all links page
+        self.parsePage(url, None)
+        scriptElement = self.doc.selectSingleNode("//SCRIPT[3]")
+        scriptText = scriptElement.getText()
+
+        pattern = Pattern.compile(".*Reader.init\((\{.+\})\).*", Pattern.DOTALL)
+        matcher = pattern.matcher(scriptText)
+        collection = java.util.ArrayList()
+        if matcher.matches():
+            json = JSONSerializer.toJSON(matcher.group(1))
+            imagesArray = json.get("images")
+            imagesDir = json.get("dir")
+            for imageItem in imagesArray:
+                image = imagesDir + imageItem.get(0)
+                collection.add(image)
+
+
+        return collection
 
     def setMangaInfo(self):
 
