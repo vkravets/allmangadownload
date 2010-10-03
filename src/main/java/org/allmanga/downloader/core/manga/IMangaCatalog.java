@@ -11,7 +11,7 @@ import java.util.Collection;
 
 /**
  *
- * @author Sly
+ * @author Vladimir Kravets
  */
 public interface IMangaCatalog {
     public Collection<InfoItem> getMangaList();

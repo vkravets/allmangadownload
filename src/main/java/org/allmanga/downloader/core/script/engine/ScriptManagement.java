@@ -14,7 +14,7 @@ import java.util.Collection;
 
 /**
  *
- * @author Sly
+ * @author Vladimir Kravets
  */
 public class ScriptManagement {
 

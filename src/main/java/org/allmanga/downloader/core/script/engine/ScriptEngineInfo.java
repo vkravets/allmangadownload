@@ -10,7 +10,7 @@ import java.util.Collection;
 
 /**
  *
- * @author Sly
+ * @author Vladimir Kravets
  */
 class ScriptEngineInfo {
 

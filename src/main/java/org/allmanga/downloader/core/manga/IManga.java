@@ -13,7 +13,7 @@ import java.util.Collection;
 
 /**
  *
- * @author Sly
+ * @author Vladimir Kravets
  */
 public interface IManga {
 

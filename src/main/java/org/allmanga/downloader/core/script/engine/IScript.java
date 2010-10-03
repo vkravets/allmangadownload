@@ -9,7 +9,7 @@ import org.allmanga.downloader.core.manga.MangaCatalog;
 
 /**
  *
- * @author Sly
+ * @author Vladimir Kravets
  */
 public interface IScript {
 

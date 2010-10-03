@@ -2,7 +2,7 @@ package org.allmanga.downloader.core.manga.share;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Sly
+ * User: Vladimir Kravets
  * Date: Sep 23, 2010
  * Time: 9:31:44 AM
  * To change this template use File | Settings | File Templates.

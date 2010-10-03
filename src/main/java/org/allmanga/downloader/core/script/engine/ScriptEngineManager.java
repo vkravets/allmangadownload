@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @author Sly
+ * @author Vladimir Kravets
  */
 public class ScriptEngineManager {
 

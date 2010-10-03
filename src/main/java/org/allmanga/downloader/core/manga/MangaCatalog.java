@@ -7,7 +7,7 @@ package org.allmanga.downloader.core.manga;
 
 /**
  *
- * @author Sly
+ * @author Vladimir Kravets
  */
 public interface MangaCatalog extends IManga, IMangaCatalog {
 

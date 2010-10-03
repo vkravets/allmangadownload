@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Sly
+ * User: Vladimir Kravets
  * Date: 03.10.2010
  * Time: 3:23:04
  * To change this template use File | Settings | File Templates.
