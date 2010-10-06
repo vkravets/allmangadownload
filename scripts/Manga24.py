@@ -169,9 +169,9 @@ class Manga24:
 
         ## get author
         name = self.doc.selectSingleNode("//DIV[@id='content']/P[1]")
-        #string = name.getText().split(u"Жанр:")
-        #string = string[0].split(u"Автор:")
-        self.author = name.getText()
+        string = name.getText().split(u"Жанр:")
+        string = string[0].split(u"Автор:")
+        self.author = string[1].strip()
 
         ## get year
         self.year = 0
