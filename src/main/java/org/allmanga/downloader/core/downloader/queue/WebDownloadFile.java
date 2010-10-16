@@ -1,27 +1,26 @@
 package org.allmanga.downloader.core.downloader.queue;
 
+import org.allmanga.downloader.core.share.ListenerSupport;
+
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Observable;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Sly
+ * User: Vladimir Kravets
  * Date: 10/16/10
  * Time: 8:15 PM
  * To change this template use File | Settings | File Templates.
  */
 // This class downloads a file from a URL.
-public class WebDownloadFile extends Observable implements Runnable{
+public class WebDownloadFile extends ListenerSupport<WebDownloadingListener> implements Runnable {
 
     // Max size of download buffer.
     private static final int MAX_BUFFER_SIZE = 1024;
-
-    // These are the status names.
-    public static final String STATUSES[] = {"Downloading",
-    "Paused", "Complete", "Cancelled", "Error"};
 
     // These are the status codes.
     public static final int DOWNLOADING = 0;
@@ -41,9 +40,6 @@ public class WebDownloadFile extends Observable implements Runnable{
         size = -1;
         downloaded = 0;
         status = DOWNLOADING;
-
-        // Begin the download.
-        download();
     }
 
     // Get this download's URL.
@@ -69,30 +65,30 @@ public class WebDownloadFile extends Observable implements Runnable{
     // Pause this download.
     public void pause() {
         status = PAUSED;
-        stateChanged();
+        onDownloadProgress();
     }
 
     // Resume this download.
     public void resume() {
         status = DOWNLOADING;
-        stateChanged();
+        onDownloadProgress();
         download();
     }
 
     // Cancel this download.
     public void cancel() {
         status = CANCELLED;
-        stateChanged();
+        onDownloadProgress();
     }
 
     // Mark this download as having an error.
     private void error() {
         status = ERROR;
-        stateChanged();
+        onDownloadProgress();
     }
 
     // Start or resume downloading.
-    private void download() {
+    public void download() {
         Thread thread = new Thread(this);
         thread.start();
     }
@@ -135,7 +131,7 @@ public class WebDownloadFile extends Observable implements Runnable{
          hasn't been already set. */
             if (size == -1) {
                 size = contentLength;
-                stateChanged();
+                onDownloadProgress();
             }
 
             // Open file and seek to the end of it.
@@ -161,14 +157,14 @@ public class WebDownloadFile extends Observable implements Runnable{
                 // Write buffer to file.
                 file.write(buffer, 0, read);
                 downloaded += read;
-                stateChanged();
+                onDownloadProgress();
             }
 
       /* Change status to complete if this point was
          reached because downloading has finished. */
             if (status == DOWNLOADING) {
                 status = COMPLETE;
-                stateChanged();
+                onDownloadProgress();
             }
         } catch (Exception e) {
             error();
@@ -189,9 +185,9 @@ public class WebDownloadFile extends Observable implements Runnable{
         }
     }
 
-    // Notify observers that this download's status has changed.
-    private void stateChanged() {
-        setChanged();
-        notifyObservers();
+    public void onDownloadProgress() {
+        for (WebDownloadingListener listener : getListeners()) {
+            listener.onDownloadProgress(this);
+        }
     }
 }

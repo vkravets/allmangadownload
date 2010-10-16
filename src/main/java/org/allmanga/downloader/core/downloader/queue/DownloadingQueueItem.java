@@ -1,13 +1,16 @@
 package org.allmanga.downloader.core.downloader.queue;
 
+import org.allmanga.downloader.core.share.ListenerSupport;
+
 /**
  * Created by IntelliJ IDEA.
- * User: Sly
+ * User: Vladimir Kravets
  * Date: 10/16/10
  * Time: 7:35 PM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class DownloadingQueueItem<T> {
+public abstract class DownloadingQueueItem<T>
+        extends ListenerSupport<DownloadingListener<DownloadingQueueItem<T>>> {
 
     private String name;
     private String description;
@@ -15,7 +18,6 @@ public abstract class DownloadingQueueItem<T> {
     private boolean isProgressEnabled;
     private int progress = 0;
 
-    // name
     public DownloadingQueueItem(T target, String name, String description) {
         this(target, name, description, true);
     }
@@ -55,5 +57,15 @@ public abstract class DownloadingQueueItem<T> {
         this.progress = progress;
     }
 
+    public T getTarget() {
+        return target;
+    }
+
     public abstract void work();
+
+    protected void onDownloadProgress() {
+        for (DownloadingListener<DownloadingQueueItem<T>> listener : getListeners()) {
+            listener.onDownloadProgress(this);
+        }
+    }
 }
