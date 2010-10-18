@@ -1,5 +1,6 @@
-package org.allmanga.downloader.core.downloader.queue;
+package org.allmanga.downloader.core.downloader;
 
+import org.allmanga.downloader.core.downloader.queue.DownloadingQueueItemStatus;
 import org.allmanga.downloader.core.downloader.queue.listeners.ListenerSupport;
 import org.allmanga.downloader.core.downloader.queue.listeners.WebDownloadingListener;
 

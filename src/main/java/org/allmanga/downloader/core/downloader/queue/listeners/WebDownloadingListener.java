@@ -1,6 +1,6 @@
 package org.allmanga.downloader.core.downloader.queue.listeners;
 
-import org.allmanga.downloader.core.downloader.queue.WebDownloadFile;
+import org.allmanga.downloader.core.downloader.WebDownloadFile;
 
 /**
  * Created by IntelliJ IDEA.

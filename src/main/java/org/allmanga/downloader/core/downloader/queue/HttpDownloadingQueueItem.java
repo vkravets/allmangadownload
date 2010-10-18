@@ -1,5 +1,6 @@
 package org.allmanga.downloader.core.downloader.queue;
 
+import org.allmanga.downloader.core.downloader.WebDownloadFile;
 import org.allmanga.downloader.core.downloader.queue.listeners.WebDownloadingListener;
 
 import java.net.URL;

@@ -5,6 +5,7 @@ import org.allmanga.downloader.core.downloader.queue.listeners.DownloadingQueueI
 import org.allmanga.downloader.core.downloader.queue.listeners.ListenerSupport;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,16 +17,17 @@ import java.util.List;
  */
 public class DownloadingQueue implements DownloadingQueueItemListener{
 
+    private static DownloadingQueue instance;
+
     private static int MAX_RUN_TASK = 3;
 
-    // TODO: add sync thread support
     private List<DownloadingQueueItem<?>> queue;
     private ListenerSupport<DownloadingQueueItemListener<DownloadingQueueItem<?>>> listenerSupport;
     private boolean possibleRunTask;
     private int numOfCurrentTask = 0;
 
     public DownloadingQueue() {
-        queue = new ArrayList<DownloadingQueueItem<?>>();
+        queue = Collections.synchronizedList(new ArrayList<DownloadingQueueItem<?>>());
         listenerSupport = new ListenerSupport<DownloadingQueueItemListener<DownloadingQueueItem<?>>>();
     }
 
@@ -118,5 +120,12 @@ public class DownloadingQueue implements DownloadingQueueItemListener{
     public boolean isPossibleToRunTask() {
         possibleRunTask = numOfCurrentTask < MAX_RUN_TASK;
         return possibleRunTask;
+    }
+
+    public static DownloadingQueue getInstance() {
+        if (instance == null) {
+            instance = new DownloadingQueue();
+        }
+        return instance;
     }
 }
