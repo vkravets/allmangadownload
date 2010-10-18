@@ -15,15 +15,16 @@ import java.net.URL;
 public class HttpDownloadingQueueItem extends DownloadingQueueItem<URL>{
 
     private WebDownloadFile downloadFile;
+    private WebDownloadingListener listener;
 
     public HttpDownloadingQueueItem(URL target, String name, String description) {
         super(target, name, description);
+        downloadFile = new WebDownloadFile(getTarget());
+        initListener();
     }
 
-    @Override
-    public void work() {
-        downloadFile = new WebDownloadFile(getTarget());
-        downloadFile.addDownloadingListener(new WebDownloadingListener() {
+    private void initListener() {
+        listener = new WebDownloadingListener() {
             @Override
             public void onDownloadingProgress(WebDownloadFile downloader) {
                 HttpDownloadingQueueItem.this.setProgress(Math.round(downloader.getProgress()));
@@ -42,14 +43,21 @@ public class HttpDownloadingQueueItem extends DownloadingQueueItem<URL>{
                 HttpDownloadingQueueItem.this.setErrorDescription(downloader.getErrorDescription());
                 HttpDownloadingQueueItem.this.onError(HttpDownloadingQueueItem.this);
             }
-        });
+        };
+        downloadFile.addDownloadingListener(listener);
+    }
+
+    @Override
+    public void work() {
         downloadFile.download();
     }
 
     @Override
     public void setStatus(DownloadingQueueItemStatus status) {
         super.setStatus(status);
+        downloadFile.removeDownloadingListener(listener);
         downloadFile.setStatus(status);
+        downloadFile.addDownloadingListener(listener);
     }
 
     public WebDownloadFile getWebDownloadFile() {
