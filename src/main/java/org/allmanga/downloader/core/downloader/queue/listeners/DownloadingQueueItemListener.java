@@ -4,7 +4,7 @@ import org.allmanga.downloader.core.downloader.queue.DownloadingQueueItem;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Sly
+ * User: Vladimir Kravets
  * Date: 18.10.2010
  * Time: 10:43:52
  * To change this template use File | Settings | File Templates.

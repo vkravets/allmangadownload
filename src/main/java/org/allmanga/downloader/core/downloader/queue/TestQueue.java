@@ -7,7 +7,7 @@ import java.net.URL;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Sly
+ * User: Vladimir Kravets
  * Date: 18.10.2010
  * Time: 12:34:39
  * To change this template use File | Settings | File Templates.
@@ -32,8 +32,8 @@ public class TestQueue {
 
             @Override
             public void onDownloadProgress(DownloadingQueueItem<?> item) {
-//                HttpDownloadingQueueItem downloadItem = (HttpDownloadingQueueItem) item;
-//                System.out.println("Progress " + downloadItem.getProgress() +" "+ downloadItem);
+                HttpDownloadingQueueItem downloadItem = (HttpDownloadingQueueItem) item;
+                System.out.println("Progress " + downloadItem.getProgress() +" "+ downloadItem);
             }
 
             @Override
