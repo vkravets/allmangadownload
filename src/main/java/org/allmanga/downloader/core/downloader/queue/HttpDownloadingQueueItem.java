@@ -46,6 +46,12 @@ public class HttpDownloadingQueueItem extends DownloadingQueueItem<URL>{
         downloadFile.download();
     }
 
+    @Override
+    public void setStatus(DownloadingQueueItemStatus status) {
+        super.setStatus(status);
+        downloadFile.setStatus(status);
+    }
+
     public WebDownloadFile getWebDownloadFile() {
         return downloadFile;
     }

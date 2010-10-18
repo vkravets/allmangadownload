@@ -61,31 +61,12 @@ public class WebDownloadFile implements Runnable, WebDownloadingListener {
         return status;
     }
 
-    // Pause this download.
-    public void pause() {
-        status = DownloadingQueueItemStatus.PAUSED;
-        onChangeStatus(status, this);
-    }
-
-    // Resume this download.
-    public void resume() {
-        status = DownloadingQueueItemStatus.STARTING;
-        onChangeStatus(status, this);
-        onDownloadingProgress(this);
-        download();
-    }
-
-    // Cancel this download.
-    public void cancel() {
-        status = DownloadingQueueItemStatus.CANCELLED;
-        onChangeStatus(status, this);
-    }
-
-    // Mark this download as having an error.
-    private void error() {
-        status = DownloadingQueueItemStatus.ERROR;
-        onError(this);
-        onChangeStatus(status, this);
+    public void setStatus(DownloadingQueueItemStatus status) {
+        this.status = status;
+        if (status.equals(DownloadingQueueItemStatus.ERROR)) {
+            onError(this);
+        }
+        onChangeStatus(this.status, this);
     }
 
     // Start or resume downloading.
@@ -119,14 +100,14 @@ public class WebDownloadFile implements Runnable, WebDownloadingListener {
 
             // Make sure response code is in the 200 range.
             if (connection.getResponseCode() / 100 != 2) {
-                error();
+                setStatus(DownloadingQueueItemStatus.ERROR);
                 return;
             }
 
             // Check for valid content length.
             int contentLength = connection.getContentLength();
             if (contentLength < 1) {
-                error();
+                setStatus(DownloadingQueueItemStatus.ERROR);
                 return;
             }
 
@@ -171,10 +152,10 @@ public class WebDownloadFile implements Runnable, WebDownloadingListener {
             }
         } catch (UnknownHostException e) {
             errorDescription = "Unknown host: " + e.getMessage();
-            error();
+            setStatus(DownloadingQueueItemStatus.ERROR);
         } catch (Exception e) {
             errorDescription = e.getMessage();
-            error();
+            setStatus(DownloadingQueueItemStatus.ERROR);
         } finally {
             // Close file.
             if (file != null) {
