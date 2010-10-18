@@ -19,6 +19,8 @@ public abstract class DownloadingQueueItem<T> implements DownloadingListener<Dow
     private T target;
     private boolean isProgressEnabled;
     private int progress = 0;
+    private String errorDescription;
+
     private ListenerSupport<DownloadingListener<DownloadingQueueItem>> listenerSupport;
 
     private DownloadingQueueItemStatus status; 
@@ -70,10 +72,32 @@ public abstract class DownloadingQueueItem<T> implements DownloadingListener<Dow
 
     public abstract void work();
 
+    public void setErrorDescription(String description) {
+        this.errorDescription = description;
+    }
+
+    public String getErrorDescription() {
+        return errorDescription;
+    }
+
     @Override
     public void onDownloadingProgress(DownloadingQueueItem downloader) {
         for (DownloadingListener<DownloadingQueueItem> listener : listenerSupport.getListeners()) {
             listener.onDownloadingProgress(downloader);
+        }
+    }
+
+    @Override
+    public void onChangeStatus(DownloadingQueueItemStatus status, DownloadingQueueItem downloader) {
+        for (DownloadingListener<DownloadingQueueItem> listener : listenerSupport.getListeners()) {
+            listener.onChangeStatus(status, downloader);
+        }
+    }
+
+    @Override
+    public void onError(DownloadingQueueItem downloader) {
+        for (DownloadingListener<DownloadingQueueItem> listener : listenerSupport.getListeners()) {
+            listener.onError(downloader);
         }
     }
 
@@ -85,16 +109,8 @@ public abstract class DownloadingQueueItem<T> implements DownloadingListener<Dow
         listenerSupport.removeListener(listener);        
     }
 
-    public void setWaitingStatus() {
-        this.status = DownloadingQueueItemStatus.WAITING;
-    }
-
-    public void setStartingStatus() {
-        this.status = DownloadingQueueItemStatus.STARTING;
-    }
-
-    public void setDoneStatus() {
-        this.status = DownloadingQueueItemStatus.DONE;
+    public void setStatus(DownloadingQueueItemStatus status) {
+        this.status = status;
     }
 
     public DownloadingQueueItemStatus getStatus() {

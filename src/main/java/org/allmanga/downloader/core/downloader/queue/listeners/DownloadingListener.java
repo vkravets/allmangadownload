@@ -1,5 +1,7 @@
 package org.allmanga.downloader.core.downloader.queue.listeners;
 
+import org.allmanga.downloader.core.downloader.queue.DownloadingQueueItemStatus;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Vladimir Kravets
@@ -8,5 +10,7 @@ package org.allmanga.downloader.core.downloader.queue.listeners;
  * To change this template use File | Settings | File Templates.
  */
 public interface DownloadingListener<T> extends Listener {
-    public void onDownloadingProgress(T downloader);     
+    public void onDownloadingProgress(T downloader);
+    public void onChangeStatus(DownloadingQueueItemStatus status, T downloader);
+    public void onError(T downloader);
 }

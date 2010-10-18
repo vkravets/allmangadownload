@@ -29,6 +29,18 @@ public class HttpDownloadingQueueItem extends DownloadingQueueItem<URL>{
                 HttpDownloadingQueueItem.this.onDownloadingProgress(HttpDownloadingQueueItem.this);
 //                System.out.println(downloader);
             }
+
+            @Override
+            public void onChangeStatus(DownloadingQueueItemStatus status, WebDownloadFile downloader) {
+                HttpDownloadingQueueItem.this.setStatus(status);
+                HttpDownloadingQueueItem.this.onChangeStatus(status, HttpDownloadingQueueItem.this);
+            }
+
+            @Override
+            public void onError(WebDownloadFile downloader) {
+                HttpDownloadingQueueItem.this.setErrorDescription(downloader.getErrorDescription());
+                HttpDownloadingQueueItem.this.onError(HttpDownloadingQueueItem.this);
+            }
         });
         downloadFile.download();
     }
@@ -36,4 +48,5 @@ public class HttpDownloadingQueueItem extends DownloadingQueueItem<URL>{
     public WebDownloadFile getWebDownloadFile() {
         return downloadFile;
     }
+    
 }

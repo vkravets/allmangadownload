@@ -10,5 +10,8 @@ package org.allmanga.downloader.core.downloader.queue;
 public enum DownloadingQueueItemStatus {
     WAITING,
     STARTING,
-    DONE
+    DONE,
+    ERROR,
+    PAUSED,
+    CANCELLED
 }

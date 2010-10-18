@@ -16,9 +16,13 @@ import java.util.List;
  */
 public class DownloadingQueue implements DownloadingQueueItemListener{
 
+    private static int MAX_RUN_TASK = 3;
+
     // TODO: add sync thread support
     private List<DownloadingQueueItem<?>> queue;
     private ListenerSupport<DownloadingQueueItemListener<DownloadingQueueItem<?>>> listenerSupport;
+    private boolean possibleRunTask;
+    private int numOfCurrentTask = 0;
 
     public DownloadingQueue() {
         queue = new ArrayList<DownloadingQueueItem<?>>();
@@ -42,20 +46,32 @@ public class DownloadingQueue implements DownloadingQueueItemListener{
 
     public boolean processCurrentItem(){
         DownloadingQueueItem<?> downloadingQueueItem = getWaitingItem();
-        if (downloadingQueueItem != null){
+        if (downloadingQueueItem != null ){
+            if (!isPossibleToRunTask()) {
+                return true;                
+            }
             onDownloadBegin(downloadingQueueItem);
             downloadingQueueItem.addDownloadingListener(new DownloadingListener<DownloadingQueueItem>() {
                 @Override
                 public void onDownloadingProgress(DownloadingQueueItem downloader) {
                     DownloadingQueue.this.onDownloadProgress(downloader);
-                    if (downloader.getProgress() >= 100) {
-                        downloader.setDoneStatus();
+                }
+
+                @Override
+                public void onChangeStatus(DownloadingQueueItemStatus status, DownloadingQueueItem downloader) {
+                    if (status.equals(DownloadingQueueItemStatus.DONE) || status.equals(DownloadingQueueItemStatus.ERROR)) {
                         DownloadingQueue.this.onDownloadFinish(downloader);
                     }
                 }
+
+                @Override
+                public void onError(DownloadingQueueItem downloader) {
+                    DownloadingQueue.this.onError(downloader);
+                }
             });
-            downloadingQueueItem.setStartingStatus();
+            downloadingQueueItem.setStatus(DownloadingQueueItemStatus.STARTING);
             downloadingQueueItem.work();
+            numOfCurrentTask++;
             return true;
         } else {
             return false;
@@ -81,6 +97,14 @@ public class DownloadingQueue implements DownloadingQueueItemListener{
         for (DownloadingQueueItemListener<DownloadingQueueItem<?>> listener:listenerSupport.getListeners()) {
             listener.onDownloadFinish(item);
         }
+        numOfCurrentTask--;
+    }
+
+    @Override
+    public void onError(DownloadingQueueItem item) {
+        for (DownloadingQueueItemListener<DownloadingQueueItem<?>> listener:listenerSupport.getListeners()) {
+            listener.onError(item);
+        }
     }
 
     public void addDownloadingQueueItemListener(DownloadingQueueItemListener<DownloadingQueueItem<?>> listener) {
@@ -89,5 +113,10 @@ public class DownloadingQueue implements DownloadingQueueItemListener{
 
     public void removeDownloadingQueueItemListener(DownloadingQueueItemListener<DownloadingQueueItem<?>> listener) {
         listenerSupport.removeListener(listener);
+    }
+
+    public boolean isPossibleToRunTask() {
+        possibleRunTask = numOfCurrentTask < MAX_RUN_TASK;
+        return possibleRunTask;
     }
 }

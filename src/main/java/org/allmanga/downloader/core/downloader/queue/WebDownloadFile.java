@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.text.MessageFormat;
 
 /**
@@ -24,24 +25,18 @@ public class WebDownloadFile implements Runnable, WebDownloadingListener {
     // Max size of download buffer.
     private static final int MAX_BUFFER_SIZE = 1024;
 
-    // These are the status codes.
-    public static final int DOWNLOADING = 0;
-    public static final int PAUSED = 1;
-    public static final int COMPLETE = 2;
-    public static final int CANCELLED = 3;
-    public static final int ERROR = 4;
-
     private URL url; // download URL
     private int size; // size of download in bytes
     private int downloaded; // number of bytes downloaded
-    private int status; // current status of download
+    private DownloadingQueueItemStatus status; // current status of download
+    private String errorDescription;
 
     // Constructor for Download.
     public WebDownloadFile(URL url) {
         this.url = url;
         size = -1;
         downloaded = 0;
-        status = DOWNLOADING;
+        status = DownloadingQueueItemStatus.STARTING;
         listenerSupport = new ListenerSupport<WebDownloadingListener>();
     }
 
@@ -61,33 +56,35 @@ public class WebDownloadFile implements Runnable, WebDownloadingListener {
     }
 
     // Get this download's status.
-    public int getStatus() {
+    public DownloadingQueueItemStatus getStatus() {
         return status;
     }
 
     // Pause this download.
     public void pause() {
-        status = PAUSED;
-        onDownloadingProgress();
+        status = DownloadingQueueItemStatus.PAUSED;
+        onChangeStatus(status, this);
     }
 
     // Resume this download.
     public void resume() {
-        status = DOWNLOADING;
-        onDownloadingProgress();
+        status = DownloadingQueueItemStatus.STARTING;
+        onChangeStatus(status, this);
+        onDownloadingProgress(this);
         download();
     }
 
     // Cancel this download.
     public void cancel() {
-        status = CANCELLED;
-        onDownloadingProgress();
+        status = DownloadingQueueItemStatus.CANCELLED;
+        onChangeStatus(status, this);
     }
 
     // Mark this download as having an error.
     private void error() {
-        status = ERROR;
-        onDownloadingProgress();
+        status = DownloadingQueueItemStatus.ERROR;
+        onError(this);
+        onChangeStatus(status, this);
     }
 
     // Start or resume downloading.
@@ -122,19 +119,21 @@ public class WebDownloadFile implements Runnable, WebDownloadingListener {
             // Make sure response code is in the 200 range.
             if (connection.getResponseCode() / 100 != 2) {
                 error();
+                return;
             }
 
             // Check for valid content length.
             int contentLength = connection.getContentLength();
             if (contentLength < 1) {
                 error();
+                return;
             }
 
       /* Set the size for this download if it
          hasn't been already set. */
             if (size == -1) {
                 size = contentLength;
-                onDownloadingProgress();
+                onDownloadingProgress(this);
             }
 
             // Open file and seek to the end of it.
@@ -142,7 +141,7 @@ public class WebDownloadFile implements Runnable, WebDownloadingListener {
             file.seek(downloaded);
 
             stream = connection.getInputStream();
-            while (status == DOWNLOADING) {
+            while (status == DownloadingQueueItemStatus.STARTING) {
         /* Size buffer according to how much of the
            file is left to download. */
                 byte buffer[];
@@ -160,16 +159,20 @@ public class WebDownloadFile implements Runnable, WebDownloadingListener {
                 // Write buffer to file.
                 file.write(buffer, 0, read);
                 downloaded += read;
-                onDownloadingProgress();
+                onDownloadingProgress(this);
             }
 
       /* Change status to complete if this point was
          reached because downloading has finished. */
-            if (status == DOWNLOADING) {
-                status = COMPLETE;
-                onDownloadingProgress();
+            if (status == DownloadingQueueItemStatus.STARTING) {
+                status = DownloadingQueueItemStatus.DONE;
+                onChangeStatus(status, this);
             }
+        } catch (UnknownHostException e) {
+            errorDescription = "Unknown host: " + e.getMessage();
+            error();
         } catch (Exception e) {
+            errorDescription = e.getMessage();
             error();
         } finally {
             // Close file.
@@ -188,10 +191,6 @@ public class WebDownloadFile implements Runnable, WebDownloadingListener {
         }
     }
 
-    public void onDownloadingProgress() {
-        onDownloadingProgress(this);
-    }
-
     public void addDownloadingListener(WebDownloadingListener listener) {
         listenerSupport.addListener(listener);
     }
@@ -208,12 +207,25 @@ public class WebDownloadFile implements Runnable, WebDownloadingListener {
     }
 
     @Override
-    public String toString() {
-//    private URL url; // download URL
-//    private int size; // size of download in bytes
-//    private int downloaded; // number of bytes downloaded
-//    private int status; // current status of download
+    public void onChangeStatus(DownloadingQueueItemStatus status, WebDownloadFile downloader) {
+        for (WebDownloadingListener listener : listenerSupport.getListeners()) {
+            listener.onChangeStatus(status, downloader);
+        }
+    }
 
+    @Override
+    public void onError(WebDownloadFile downloader) {
+        for (WebDownloadingListener listener : listenerSupport.getListeners()) {
+            listener.onError(downloader);
+        }
+    }
+
+    @Override
+    public String toString() {
         return MessageFormat.format("[URL:{0}, Size:{1}, Downloaded:{2}, Status:{3}]", url, size, downloaded, status);
-    }     
+    }
+
+    public String getErrorDescription() {
+        return errorDescription;
+    }
 }
