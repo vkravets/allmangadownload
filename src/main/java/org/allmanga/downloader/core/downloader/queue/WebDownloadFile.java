@@ -1,13 +1,13 @@
 package org.allmanga.downloader.core.downloader.queue;
 
-import org.allmanga.downloader.core.share.ListenerSupport;
+import org.allmanga.downloader.core.downloader.queue.listeners.ListenerSupport;
+import org.allmanga.downloader.core.downloader.queue.listeners.WebDownloadingListener;
 
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
-import java.util.Observable;
+import java.text.MessageFormat;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,7 +17,9 @@ import java.util.Observable;
  * To change this template use File | Settings | File Templates.
  */
 // This class downloads a file from a URL.
-public class WebDownloadFile extends ListenerSupport<WebDownloadingListener> implements Runnable {
+public class WebDownloadFile implements Runnable, WebDownloadingListener {
+
+    private ListenerSupport<WebDownloadingListener> listenerSupport;
 
     // Max size of download buffer.
     private static final int MAX_BUFFER_SIZE = 1024;
@@ -40,6 +42,7 @@ public class WebDownloadFile extends ListenerSupport<WebDownloadingListener> imp
         size = -1;
         downloaded = 0;
         status = DOWNLOADING;
+        listenerSupport = new ListenerSupport<WebDownloadingListener>();
     }
 
     // Get this download's URL.
@@ -65,26 +68,26 @@ public class WebDownloadFile extends ListenerSupport<WebDownloadingListener> imp
     // Pause this download.
     public void pause() {
         status = PAUSED;
-        onDownloadProgress();
+        onDownloadingProgress();
     }
 
     // Resume this download.
     public void resume() {
         status = DOWNLOADING;
-        onDownloadProgress();
+        onDownloadingProgress();
         download();
     }
 
     // Cancel this download.
     public void cancel() {
         status = CANCELLED;
-        onDownloadProgress();
+        onDownloadingProgress();
     }
 
     // Mark this download as having an error.
     private void error() {
         status = ERROR;
-        onDownloadProgress();
+        onDownloadingProgress();
     }
 
     // Start or resume downloading.
@@ -131,7 +134,7 @@ public class WebDownloadFile extends ListenerSupport<WebDownloadingListener> imp
          hasn't been already set. */
             if (size == -1) {
                 size = contentLength;
-                onDownloadProgress();
+                onDownloadingProgress();
             }
 
             // Open file and seek to the end of it.
@@ -157,14 +160,14 @@ public class WebDownloadFile extends ListenerSupport<WebDownloadingListener> imp
                 // Write buffer to file.
                 file.write(buffer, 0, read);
                 downloaded += read;
-                onDownloadProgress();
+                onDownloadingProgress();
             }
 
       /* Change status to complete if this point was
          reached because downloading has finished. */
             if (status == DOWNLOADING) {
                 status = COMPLETE;
-                onDownloadProgress();
+                onDownloadingProgress();
             }
         } catch (Exception e) {
             error();
@@ -185,9 +188,32 @@ public class WebDownloadFile extends ListenerSupport<WebDownloadingListener> imp
         }
     }
 
-    public void onDownloadProgress() {
-        for (WebDownloadingListener listener : getListeners()) {
-            listener.onDownloadProgress(this);
+    public void onDownloadingProgress() {
+        onDownloadingProgress(this);
+    }
+
+    public void addDownloadingListener(WebDownloadingListener listener) {
+        listenerSupport.addListener(listener);
+    }
+
+    public void removeDownloadingListener(WebDownloadingListener listener) {
+        listenerSupport.removeListener(listener);
+    }
+
+    @Override
+    public void onDownloadingProgress(WebDownloadFile downloader) {
+        for (WebDownloadingListener listener : listenerSupport.getListeners()) {
+            listener.onDownloadingProgress(downloader);
         }
     }
+
+    @Override
+    public String toString() {
+//    private URL url; // download URL
+//    private int size; // size of download in bytes
+//    private int downloaded; // number of bytes downloaded
+//    private int status; // current status of download
+
+        return MessageFormat.format("[URL:{0}, Size:{1}, Downloaded:{2}, Status:{3}]", url, size, downloaded, status);
+    }     
 }

@@ -1,6 +1,9 @@
 package org.allmanga.downloader.core.downloader.queue;
 
-import org.allmanga.downloader.core.share.ListenerSupport;
+import org.allmanga.downloader.core.downloader.queue.listeners.DownloadingListener;
+import org.allmanga.downloader.core.downloader.queue.listeners.ListenerSupport;
+
+import java.text.MessageFormat;
 
 /**
  * Created by IntelliJ IDEA.
@@ -9,14 +12,16 @@ import org.allmanga.downloader.core.share.ListenerSupport;
  * Time: 7:35 PM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class DownloadingQueueItem<T>
-        extends ListenerSupport<DownloadingListener<DownloadingQueueItem<T>>> {
+public abstract class DownloadingQueueItem<T> implements DownloadingListener<DownloadingQueueItem> {
 
     private String name;
     private String description;
     private T target;
     private boolean isProgressEnabled;
     private int progress = 0;
+    private ListenerSupport<DownloadingListener<DownloadingQueueItem>> listenerSupport;
+
+    private DownloadingQueueItemStatus status; 
 
     public DownloadingQueueItem(T target, String name, String description) {
         this(target, name, description, true);
@@ -27,6 +32,8 @@ public abstract class DownloadingQueueItem<T>
         this.description = description;
         this.isProgressEnabled = progressEnabled;
         this.target = target;
+        listenerSupport = new ListenerSupport<DownloadingListener<DownloadingQueueItem>>();
+        this.status = DownloadingQueueItemStatus.WAITING;
     }
 
     public String getName() {
@@ -63,9 +70,39 @@ public abstract class DownloadingQueueItem<T>
 
     public abstract void work();
 
-    protected void onDownloadProgress() {
-        for (DownloadingListener<DownloadingQueueItem<T>> listener : getListeners()) {
-            listener.onDownloadProgress(this);
+    @Override
+    public void onDownloadingProgress(DownloadingQueueItem downloader) {
+        for (DownloadingListener<DownloadingQueueItem> listener : listenerSupport.getListeners()) {
+            listener.onDownloadingProgress(downloader);
         }
+    }
+
+    public void addDownloadingListener(DownloadingListener<DownloadingQueueItem> listener) {
+        listenerSupport.addListener(listener);
+    }
+
+    public void removeDownloadingListener(DownloadingListener<DownloadingQueueItem> listener) {
+        listenerSupport.removeListener(listener);        
+    }
+
+    public void setWaitingStatus() {
+        this.status = DownloadingQueueItemStatus.WAITING;
+    }
+
+    public void setStartingStatus() {
+        this.status = DownloadingQueueItemStatus.STARTING;
+    }
+
+    public void setDoneStatus() {
+        this.status = DownloadingQueueItemStatus.DONE;
+    }
+
+    public DownloadingQueueItemStatus getStatus() {
+        return status;
+    }
+
+    @Override
+    public String toString() {
+        return MessageFormat.format("Downloading {0}. Name: {1}. Description: {2}. Progress: {3}", getTarget(), name, description, progress);
     }
 }
