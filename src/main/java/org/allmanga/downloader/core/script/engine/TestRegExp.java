@@ -36,6 +36,9 @@ public class TestRegExp {
         JSONObject json = (JSONObject)JSONSerializer.toJSON(matcher.group(1));
         JSONArray images = (JSONArray)json.get("images");
         System.out.println(images);
+        for (Object item : images) {
+            System.out.println(item.getClass().getName() + " " + item);
+        }
     }
 
 }
