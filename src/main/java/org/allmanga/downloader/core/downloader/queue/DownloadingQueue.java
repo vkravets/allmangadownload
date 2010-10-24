@@ -13,9 +13,8 @@ import java.util.List;
  * User: Vladimir Kravets
  * Date: 17.10.2010
  * Time: 1:54:06
- * To change this template use File | Settings | File Templates.
  */
-public class DownloadingQueue implements DownloadingQueueItemListener{
+public class DownloadingQueue {
 
     private static DownloadingQueue instance;
 
@@ -52,23 +51,23 @@ public class DownloadingQueue implements DownloadingQueueItemListener{
             if (!isPossibleToRunTask()) {
                 return true;                
             }
-            onDownloadBegin(downloadingQueueItem);
+            fireDownloadBegin(downloadingQueueItem);
             downloadingQueueItem.addDownloadingListener(new DownloadingListener<DownloadingQueueItem>() {
                 @Override
                 public void onDownloadingProgress(DownloadingQueueItem downloader) {
-                    DownloadingQueue.this.onDownloadProgress(downloader);
+                    DownloadingQueue.this.fireDownloadProgress(downloader);
                 }
 
                 @Override
                 public void onChangeStatus(DownloadingQueueItemStatus status, DownloadingQueueItem downloader) {
                     if (status.equals(DownloadingQueueItemStatus.DONE) || status.equals(DownloadingQueueItemStatus.ERROR)) {
-                        DownloadingQueue.this.onDownloadFinish(downloader);
+                        DownloadingQueue.this.fireDownloadFinish(downloader);
                     }
                 }
 
                 @Override
                 public void onError(DownloadingQueueItem downloader) {
-                    DownloadingQueue.this.onError(downloader);
+                    DownloadingQueue.this.fireError(downloader);
                 }
             });
             downloadingQueueItem.setStatus(DownloadingQueueItemStatus.STARTING);
@@ -80,30 +79,26 @@ public class DownloadingQueue implements DownloadingQueueItemListener{
         }
     }
 
-    @Override
-    public void onDownloadBegin(DownloadingQueueItem item) {
+    private void fireDownloadBegin(DownloadingQueueItem item) {
         for (DownloadingQueueItemListener<DownloadingQueueItem<?>> listener:listenerSupport.getListeners()) {
             listener.onDownloadBegin(item);
         }
     }
 
-    @Override
-    public void onDownloadProgress(DownloadingQueueItem item) {
+    private void fireDownloadProgress(DownloadingQueueItem item) {
         for (DownloadingQueueItemListener<DownloadingQueueItem<?>> listener:listenerSupport.getListeners()) {
             listener.onDownloadProgress(item);
         }
     }
 
-    @Override
-    public void onDownloadFinish(DownloadingQueueItem item) {
+    private void fireDownloadFinish(DownloadingQueueItem item) {
         for (DownloadingQueueItemListener<DownloadingQueueItem<?>> listener:listenerSupport.getListeners()) {
             listener.onDownloadFinish(item);
         }
         numOfCurrentTask--;
     }
 
-    @Override
-    public void onError(DownloadingQueueItem item) {
+    private void fireError(DownloadingQueueItem item) {
         for (DownloadingQueueItemListener<DownloadingQueueItem<?>> listener:listenerSupport.getListeners()) {
             listener.onError(item);
         }

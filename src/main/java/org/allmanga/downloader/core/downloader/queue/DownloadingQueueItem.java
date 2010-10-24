@@ -10,9 +10,8 @@ import java.text.MessageFormat;
  * User: Vladimir Kravets
  * Date: 10/16/10
  * Time: 7:35 PM
- * To change this template use File | Settings | File Templates.
  */
-public abstract class DownloadingQueueItem<T> implements DownloadingListener<DownloadingQueueItem> {
+public abstract class DownloadingQueueItem<T> {
 
     private String name;
     private String description;
@@ -80,22 +79,19 @@ public abstract class DownloadingQueueItem<T> implements DownloadingListener<Dow
         return errorDescription;
     }
 
-    @Override
-    public void onDownloadingProgress(DownloadingQueueItem downloader) {
+    protected void fireDownloadingProgress(DownloadingQueueItem downloader) {
         for (DownloadingListener<DownloadingQueueItem> listener : listenerSupport.getListeners()) {
             listener.onDownloadingProgress(downloader);
         }
     }
 
-    @Override
-    public void onChangeStatus(DownloadingQueueItemStatus status, DownloadingQueueItem downloader) {
+    protected void fireChangeStatus(DownloadingQueueItemStatus status, DownloadingQueueItem downloader) {
         for (DownloadingListener<DownloadingQueueItem> listener : listenerSupport.getListeners()) {
             listener.onChangeStatus(status, downloader);
         }
     }
 
-    @Override
-    public void onError(DownloadingQueueItem downloader) {
+    protected void fireError(DownloadingQueueItem downloader) {
         for (DownloadingListener<DownloadingQueueItem> listener : listenerSupport.getListeners()) {
             listener.onError(downloader);
         }
