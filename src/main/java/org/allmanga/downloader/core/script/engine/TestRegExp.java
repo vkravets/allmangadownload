@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
  * User: Vladimir Kravets
  * Date: 03.10.2010
  * Time: 3:23:04
- * To change this template use File | Settings | File Templates.
  */
 public class TestRegExp {
 

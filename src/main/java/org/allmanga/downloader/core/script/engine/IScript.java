@@ -8,8 +8,10 @@ package org.allmanga.downloader.core.script.engine;
 import org.allmanga.downloader.core.manga.MangaCatalog;
 
 /**
- *
- * @author Vladimir Kravets
+ * Created by IntelliJ IDEA.
+ * User: Vladimir Kravets
+ * Date: Sep 27, 2010
+ * Time: 12:35:39 AM
  */
 public interface IScript {
 

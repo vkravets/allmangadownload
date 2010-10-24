@@ -8,7 +8,6 @@ import java.util.List;
  * User: Vladimir Kravets
  * Date: 18.10.2010
  * Time: 10:37:05
- * To change this template use File | Settings | File Templates.
  */
 public class ListenerSupport<T extends Listener> {
 

@@ -5,7 +5,6 @@ package org.allmanga.downloader.core.downloader.queue.listeners;
  * User: Vladimir Kravets
  * Date: 18.10.2010
  * Time: 10:37:34
- * To change this template use File | Settings | File Templates.
  */
 public interface Listener {
 }

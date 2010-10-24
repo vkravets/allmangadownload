@@ -13,8 +13,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- *
- * @author Vladimir Kravets
+ * Created by IntelliJ IDEA.
+ * User: Vladimir Kravets
+ * Date: Sep 27, 2010
+ * Time: 12:35:39 AM
  */
 public class ScriptManagement {
 

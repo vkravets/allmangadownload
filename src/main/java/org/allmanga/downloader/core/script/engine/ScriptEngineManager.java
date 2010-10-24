@@ -17,8 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @author Vladimir Kravets
+ * Created by IntelliJ IDEA.
+ * User: Vladimir Kravets
+ * Date: Sep 27, 2010
+ * Time: 12:35:39 AM
  */
+
 public class ScriptEngineManager {
 
     private static HashMap<String, ScriptEngineInfo> engines;

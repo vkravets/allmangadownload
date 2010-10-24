@@ -12,7 +12,6 @@ import java.util.HashMap;
  * User: Vladimir Kravets
  * Date: Sep 22, 2010
  * Time: 6:58:59 PM
- * Mail to vladimir.kravets-ukr@hp.com
  */
 public class MangaImpl extends AbstractManga implements IManga{
 

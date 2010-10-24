@@ -7,7 +7,6 @@ import org.allmanga.downloader.core.downloader.queue.DownloadingQueueItem;
  * User: Vladimir Kravets
  * Date: 18.10.2010
  * Time: 10:43:52
- * To change this template use File | Settings | File Templates.
  */
 public interface DownloadingQueueItemListener<T extends DownloadingQueueItem> extends Listener{
     public void onDownloadBegin(T item);

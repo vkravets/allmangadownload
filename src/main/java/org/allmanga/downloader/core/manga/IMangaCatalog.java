@@ -9,9 +9,11 @@ import org.allmanga.downloader.core.manga.share.InfoItem;
 
 import java.util.Collection;
 
-/**
- *
- * @author Vladimir Kravets
+ /**
+ * Created by IntelliJ IDEA.
+ * User: Vladimir Kravets
+ * Date: Sep 27, 2010
+ * Time: 12:35:39 AM
  */
 public interface IMangaCatalog {
     public Collection<InfoItem> getMangaList();

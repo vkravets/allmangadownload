@@ -16,8 +16,8 @@ import java.text.MessageFormat;
  * User: Vladimir Kravets
  * Date: 10/16/10
  * Time: 8:15 PM
- * To change this template use File | Settings | File Templates.
  */
+
 // This class downloads a file from a URL.
 public class WebDownloadFile implements Runnable, WebDownloadingListener {
 

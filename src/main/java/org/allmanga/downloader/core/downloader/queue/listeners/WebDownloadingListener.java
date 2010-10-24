@@ -7,7 +7,6 @@ import org.allmanga.downloader.core.downloader.WebDownloadFile;
  * User: Vladimir Kravets
  * Date: 18.10.2010
  * Time: 10:49:11
- * To change this template use File | Settings | File Templates.
  */
 public interface WebDownloadingListener extends DownloadingListener<WebDownloadFile>{
 }

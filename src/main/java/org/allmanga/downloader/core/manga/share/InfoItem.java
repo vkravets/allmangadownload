@@ -5,7 +5,6 @@ package org.allmanga.downloader.core.manga.share;
  * User: Vladimir Kravets
  * Date: Sep 22, 2010
  * Time: 9:12:19 PM
- * Mail to vladimir.kravets-ukr@hp.com
  */
 public class InfoItem {
 

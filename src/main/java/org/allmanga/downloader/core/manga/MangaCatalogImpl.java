@@ -10,7 +10,6 @@ import java.util.Collection;
  * User: Vladimir Kravets
  * Date: Sep 22, 2010
  * Time: 7:49:06 PM
- * Mail to vladimir.kravets-ukr@hp.com
  */
 public class MangaCatalogImpl extends AbstractManga implements IMangaCatalog{
 
