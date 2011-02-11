@@ -8,7 +8,7 @@ import org.allmanga.downloader.core.manga.share.ChapterInfo
  * Date: 11.02.11
  * Time: 15:43
  */
-class Manga24 implements MangaCatalog {
+class Manga24Catalog implements MangaCatalog {
 
     void parsePage(String url, PageType type) {
         println(url + " " + type)
@@ -74,4 +74,6 @@ class Manga24 implements MangaCatalog {
 
 }
 
-new Manga24();
+def MangaCatalog getManga() {
+    return new Manga24Catalog()
+}
