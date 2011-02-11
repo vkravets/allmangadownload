@@ -168,18 +168,20 @@ class Manga24:
     def setMangaInfo(self):
 
         ## get author
-        name = self.doc.selectSingleNode("//DIV[@id='content']/P[1]")
+        name = self.doc.selectSingleNode("//DIV[@id='content']/DIV/P[1]")
         # split by Genre - russian string "Жанр"
+        print name.getText()
         string = name.getText().split(u"\u0416\u0430\u043d\u0440:")
         # split by Author - russian string "Автор"
         string = string[0].split(u"\u0410\u0432\u0442\u043e\u0440:")
-        self.author = string[1].strip()
+        if len(string) > 1:
+            self.author = string[1].strip()
 
         ## get year
         self.year = 0
 
         ## Get genres of manga
-        name = self.doc.selectNodes("//DIV[@id='content']/P[1]/A")
+        name = self.doc.selectNodes("//DIV[@id='content']/DIV/P[1]/A")
         collection = java.util.ArrayList()
         for item in name:
             info = InfoItem(item.getText(), self.baseUrl+item.attribute("href").getText())
@@ -187,11 +189,11 @@ class Manga24:
         self.mangaGenre = collection
 
         ## Get Description of manga
-        name = self.doc.selectSingleNode("//DIV[@id='content']/P[2]")
+        name = self.doc.selectSingleNode("//DIV[@id='content']/DIV/P[2]")
         self.description = name.getText()
 
         ## Get path to cover of manga
-        name = self.doc.selectSingleNode("//DIV[@id='content']/IMG[@id='imgright']")
+        name = self.doc.selectSingleNode("//DIV[@id='content']/DIV/IMG[@id='imgright']")
         if name is not None:
             coverUrl = name.attribute("src").getText()
             if  (coverUrl.find(self.baseUrl) != -1):
@@ -212,7 +214,7 @@ class Manga24:
         return
 
     def setCatalogManga(self):
-        name = self.doc.selectNodes("//DIV[@id='content']/P/DL/DD/A")
+        name = self.doc.selectNodes("//DIV/DL/DD/A")
         collection = java.util.ArrayList()
         for item in name:
             info = InfoItem(item.getText(), self.baseUrl+item.attribute("href").getText())
