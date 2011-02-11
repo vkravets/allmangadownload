@@ -84,8 +84,10 @@ public class ScriptEngineManager {
         InputStream stream = new FileInputStream(scriptFile);
         InputStreamReader reader = new InputStreamReader(stream);
         try {
-		    scriptEngine.eval(reader);
-		    Object manga = ((Invocable)scriptEngine).invokeFunction("getManga");
+            Object manga = scriptEngine.eval(reader);
+		    if (manga == null) {
+                manga = ((Invocable)scriptEngine).invokeFunction("getManga");
+            }
             data = ((Invocable)scriptEngine).getInterface(manga, MangaCatalog.class);
         } catch (NoSuchMethodException e) {
             LOG.warn("Main function getManga() was not found in the " + scriptFile.getName() + "Please check that needed function exists and return correct data");
