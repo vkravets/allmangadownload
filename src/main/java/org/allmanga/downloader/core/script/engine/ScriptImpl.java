@@ -24,7 +24,7 @@ import java.util.Collection;
  */
 public class ScriptImpl implements IScript {
 
-    private Logger LOG = Logger.getLogger(ScriptImpl.class);
+    private static Logger LOG = Logger.getLogger(ScriptImpl.class);
 
     private String scriptName;
     private String scriptPath;
