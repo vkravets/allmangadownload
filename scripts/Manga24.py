@@ -10,6 +10,7 @@ from java.lang import *
 import org
 import java
 
+#noinspection PyCallingNonCallable
 class Manga24:
     """Constructor"""
     def __init__(self):
@@ -37,7 +38,7 @@ class Manga24:
         """ Perform parsing of mange page and save all needed information """
         print "Parsing page %s [%s]" % (url, type)
 
-        if (self.url == url):
+        if self.url == url:
             return
         self.url = url
 
@@ -48,16 +49,16 @@ class Manga24:
         domReader = org.dom4j.io.DOMReader()
         self.doc = domReader.read(document)
 
-        if (type == PageType.MANGA_INFO):
+        if type == PageType.MANGA_INFO:
             self.setMangaInfo()
 
-        if (type == PageType.GENRES):
+        if type == PageType.GENRES:
             self.setCatalogGenres()
 
-        if (type == PageType.MANGA_LIST):
+        if type == PageType.MANGA_LIST:
             self.setCatalogManga()
 
-        if (type == PageType.TRANSLATORS):
+        if type == PageType.TRANSLATORS:
             self.setCatalogTranslators()
 
         return
@@ -92,7 +93,7 @@ class Manga24:
         name = self.doc.selectNodes("//DIV[@class='chapters']/UL/LI")
         collection = java.util.ArrayList()
         for item in name:
-            iterator = item.elementIterator("EM");
+            iterator = item.elementIterator("EM")
             chapterName = ""
             chapterURL = ""
             chapterTranslate = ""
@@ -104,7 +105,7 @@ class Manga24:
                 chapterURLElement = iterator.next()
                 chapterURLElement = chapterURLElement.elementIterator("A").next()
                 chapterURL = chapterURLElement.attribute("href").getText()
-                if (chapterURL.find(self.baseUrl) == -1):
+                if chapterURL.find(self.baseUrl) == -1:
                     chapterURL = self.baseUrl + chapterURL
             chapterInfo = ChapterInfo(chapterName.strip(), chapterTranslate.strip(), chapterURL.strip())
             collection.add(chapterInfo)
@@ -116,7 +117,7 @@ class Manga24:
         print "Getting chapter \"%s\" " % name
         chapterList = self.chapters
         for item in chapterList:
-            if (item.getName() == name):
+            if item.getName() == name:
                 return self.parseChapter(item.getUrl())
         return None
 
@@ -196,7 +197,7 @@ class Manga24:
         name = self.doc.selectSingleNode("//DIV[@id='content']/DIV/IMG[@id='imgright']")
         if name is not None:
             coverUrl = name.attribute("src").getText()
-            if  (coverUrl.find(self.baseUrl) != -1):
+            if  coverUrl.find(self.baseUrl) != -1:
                 self.cover = coverUrl
             else:
                 self.cover = self.baseUrl + coverUrl
@@ -227,7 +228,7 @@ class Manga24:
         collection = java.util.ArrayList()
         for item in name:
             text = item.getText().strip()
-            if (len(text) > 0):
+            if text:
                 info = InfoItem(text, self.baseUrl+item.attribute("href").getText())
                 collection.add(info)
         self.traslatorsCatalog = collection
@@ -235,3 +236,15 @@ class Manga24:
 
 def getManga():
     return Manga24()
+
+#if __name__ == '__main__':
+#    mangaCatalog = getManga()
+#    mangaCatalog.parsePage(mangaCatalog.getMangaCatalogURL(), PageType.MANGA_LIST)
+#    for info in mangaCatalog.getMangaList():
+#         print "%s -> %s" (info.getName(), info.getUrl())
+#
+#    mangaCatalog.parsePage(mangaCatalog.getTranslatesCatalogURL(), PageType.TRANSLATORS)
+#    for info in mangaCatalog.getTranslatesCatalog():
+#        print "%s -> %s" (info.getName(), info.getUrl())
+#
+    #Collection<InfoItem> mangaList = mangaCatalog.getMangaList();

@@ -85,7 +85,7 @@ public class ScriptEngineManager {
         InputStreamReader reader = new InputStreamReader(stream);
         try {
             Object manga = scriptEngine.eval(reader);
-		    if (manga == null) {
+            if (manga == null) {
                 manga = ((Invocable)scriptEngine).invokeFunction("getManga");
             }
             data = ((Invocable)scriptEngine).getInterface(manga, MangaCatalog.class);

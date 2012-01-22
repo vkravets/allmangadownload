@@ -70,36 +70,36 @@ public class ScriptImpl implements IScript {
 
 
     public static void main(String[] argv) {
-//        IScript script = new ScriptImpl("Manga24", "scripts\\manga24.py", "jython");
-        IScript script = new ScriptImpl("Manga24", "scripts\\Manga24.groovy", "groovy");
+        IScript script = new ScriptImpl("Manga24", "scripts"+System.getProperty("file.separator")+"Manga24.py", "jython");
+//        IScript script = new ScriptImpl("Manga24", "scripts\\Manga24.groovy", "groovy");
         MangaCatalog catalog = script.getManga();
         MangaCatalogImpl mangaCatalog = new MangaCatalogImpl(catalog);
 
-//        for (InfoItem info : mangaCatalog.getGenreCatalog()) {
-//            System.out.println(info.getName() + " -> " + info.getUrl());
-//        }
+        for (InfoItem info : mangaCatalog.getGenreCatalog()) {
+            System.out.println(info.getName() + " -> " + info.getUrl());
+        }
 
-//        for (InfoItem info : mangaCatalog.getTranslatesCatalog()) {
-//            System.out.println(info.getName() + " -> " + info.getUrl());
-//        }
+        for (InfoItem info : mangaCatalog.getTranslatesCatalog()) {
+            System.out.println(info.getName() + " -> " + info.getUrl());
+        }
 
         Collection<InfoItem> mangaList = mangaCatalog.getMangaList();
         int i = 0;
         for (InfoItem info : mangaList) {
             System.out.println(info.getUrl());
-//            MangaImpl manga = new MangaImpl(catalog, info);
-//            System.out.println(manga.getAuthor());
-//            System.out.println(manga.getCover());
-//            for (InfoItem genre : manga.getMangaGenre()) {
-//                System.out.println(genre.getName());
-//            }
-//            for (ChapterInfo chapterName : manga.getChapters()) {
-//                System.out.println(chapterName.getName() + " [" + chapterName.getTranslator() + "] " + chapterName.getUrl());
-//                System.out.println(manga.getChapter(chapterName.getName()));
-//            }
-//            System.out.println(manga.getDescription());
-//            i++;
-//            if (i >= 1) break;
+            MangaImpl manga = new MangaImpl(catalog, info);
+            System.out.println(manga.getAuthor());
+            System.out.println(manga.getCover());
+            for (InfoItem genre : manga.getMangaGenre()) {
+                System.out.println(genre.getName());
+            }
+            for (ChapterInfo chapterName : manga.getChapters()) {
+                System.out.println(chapterName.getName() + " [" + chapterName.getTranslator() + "] " + chapterName.getUrl());
+                System.out.println(manga.getChapter(chapterName.getName()));
+            }
+            System.out.println(manga.getDescription());
+            i++;
+            if (i >= 1) break;
         }
         
     }
